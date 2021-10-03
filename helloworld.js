@@ -5,7 +5,6 @@ function helloWorld(){
 helloWorld();
 
 function helloNode(){
-    console.log("hello node")
 }
 
 helloNode();
