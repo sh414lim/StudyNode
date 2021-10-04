@@ -8,6 +8,5 @@ function checkString(str){
         return even;
     }
 }
-
 console.log(checkNumber(10));
 console.log(checkString('hello'));

@@ -10,6 +10,7 @@ function checkOddEven(number){
         return even;
     }
 }
+//한가지만 빼고 싶으면 module.exports
 
 module.exports={
     checkOddEven,
