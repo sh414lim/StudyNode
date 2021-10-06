@@ -28,7 +28,7 @@ http.createServer(async (req, res) => {
       }
     } else if (req.method === 'POST') {
       if (req.url === '/user') {
-        let body = '';
+        let body = '';ㅇ
         // 요청의 body를 stream 형식으로 받음
         req.on('data', (data) => {
           body += data;
