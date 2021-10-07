@@ -4,3 +4,4 @@ console.log('os.freemem():',os.totalmem());
 console.log('os.arch()',os.arch());
 console.log(os.cpus());
 
+ 
