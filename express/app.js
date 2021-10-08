@@ -25,7 +25,21 @@ app.use("/about",(req,res,next)=>{
 //Router
 //http 메서드 url 
 app.get('/',(rea,res)=>{
-    res.sendFile(path.join(__dirname,'./index.html'))
+     // res.sendFile(path.join(__dirname,'./index.html'))
+    
+     //express 버전
+    // res.setHeader('Content-Type','text/html')
+    // res.status(200).send('안녕하세요')
+
+    //api 서버 생성 할때 자주 사용(음답)
+    res.json({hello:'marko'});
+},(req,res,next)=>{
+    try{
+        console.log("에러 발생")
+    }catch{
+        //next함수한에 넣어주면 바로 에러처리 메소드로 넘어간다
+        next(error)
+    }
 });
 
 app.post('/',(rea,res)=>{
@@ -47,6 +61,10 @@ app.get('/category/:name',(req,res)=>{
 app.get('/about',(rea,res)=>{
     res.send("hello express")
 });
+
+app.use((req,res,next)=>{
+    res.send("404 에러 주소가 확인 되지 않는다")
+})
 
 //에스터리스크
 //모든  get 요청을 다 처리하겟다
