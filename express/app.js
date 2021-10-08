@@ -1,6 +1,16 @@
 const express = require("express");  
 const path = require('path')
+const morgan = require("morgan");
+const cookieParser = require('cookie-parser');
+
 const app=express();
+
+//배포시 combined
+//개발시 dev
+app.use(morgan('dev'));
+app.use(cookieParser('password'));
+app.use(express.json());
+app.use(express.urlencoded({extenided:true}));
 
 app.set('port',process.env.PORT || 3000); //서버에 속성을 심는다
 
@@ -19,26 +29,37 @@ app.use("/about",(req,res,next)=>{
     next();
 },(req,res,next)=>{
     //함수가 미들웨어를 use에 장착
-    throw new Error("에러생성")
+    // throw new Error("에러생성")ex
 })
 
 //Router
 //http 메서드 url 
 app.get('/',(rea,res)=>{
      // res.sendFile(path.join(__dirname,'./index.html'))
-    
+    req.cookies // {mycookie:'test}
+        req.signedCookies; //쿠키 암호화(서명)
+    res.cookie('name',encodeURIComponent(name),{
+        expires:new Date(),
+        httpOnly:true,
+        path:'/',
+    })
+    //쿠키 삭제
+    res.clearCookie('name',encodeURIComponent(name),{
+        httpOnly:true,
+        path:'/',
+    })
      //express 버전
-    // res.setHeader('Content-Type','text/html')
-    // res.status(200).send('안녕하세요')
+    res.setHeader('Content-Type','text/html')
+    res.status(200).send('안녕하세요')
 
     //api 서버 생성 할때 자주 사용(음답)
-    res.json({hello:'marko'});
+    // res.json({hello:'marko'});
 },(req,res,next)=>{
     try{
         console.log("에러 발생")
     }catch{
         //next함수한에 넣어주면 바로 에러처리 메소드로 넘어간다
-        next(error)
+        // next(error)
     }
 });
 
@@ -63,7 +84,8 @@ app.get('/about',(rea,res)=>{
 });
 
 app.use((req,res,next)=>{
-    res.send("404 에러 주소가 확인 되지 않는다")
+    // res.send("404 에러 주소가 확인 되지 않는다")
+    res.status(404).send('404입니다')
 })
 
 //에스터리스크
