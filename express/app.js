@@ -2,15 +2,21 @@ const express = require("express");
 const path = require('path')
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
+const session=require('express-session');
 
 const app=express();
 
 //배포시 combined
 //개발시 dev
+//미들웨어 순서 중요 ->모건 무조건 실행->거의 모든 미들웨어는 내부적으로 next 를 실행한다
 app.use(morgan('dev'));
+// app.use('요청경로',express.static('실제경로'))
+app.use(express.static(path.join(__dirname,'public'))) //정적 파일을 보내줌.파일이 실제 경로 안에 존재하면 다음 미들웨어를 호출한다
 app.use(cookieParser('password'));
+app.use(session());
 app.use(express.json());
 app.use(express.urlencoded({extenided:true}));
+
 
 app.set('port',process.env.PORT || 3000); //서버에 속성을 심는다
 
