@@ -13,7 +13,17 @@ app.use(morgan('dev'));
 // app.use('요청경로',express.static('실제경로'))
 app.use(express.static(path.join(__dirname,'public'))) //정적 파일을 보내줌.파일이 실제 경로 안에 존재하면 다음 미들웨어를 호출한다
 app.use(cookieParser('password'));
-app.use(session());
+app.use(session(
+{
+    resave:false,
+    saveUninitialized:false,
+    secret:"marko",
+    cookie:{
+        httpOnly:true, //세션안에서는 쿠키를 무조건 설정해야하고 httponly를 true로 설정을해야 js로 공격을 당하지 않는다
+    },
+    name:'connect.sid'
+}
+));
 app.use(express.json());
 app.use(express.urlencoded({extenided:true}));
 
@@ -41,6 +51,7 @@ app.use("/about",(req,res,next)=>{
 //Router
 //http 메서드 url 
 app.get('/',(rea,res)=>{
+    req.session.id = 'hello' // 그 사용자에 대한 세션이됨 .요청을 보낸 사람만 id가 헬로가 된다 ->개인의 저장공간
      // res.sendFile(path.join(__dirname,'./index.html'))
     req.cookies // {mycookie:'test}
         req.signedCookies; //쿠키 암호화(서명)
