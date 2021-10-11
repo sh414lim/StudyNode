@@ -6,6 +6,7 @@ const session=require('express-session');
 
 const app=express();
 
+//
 //배포시 combined
 //개발시 dev
 //미들웨어 순서 중요 ->모건 무조건 실행->거의 모든 미들웨어는 내부적으로 next 를 실행한다
