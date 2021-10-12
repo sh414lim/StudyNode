@@ -1,11 +1,13 @@
 const express = require("express");  
-dotenv.config(); //비밀키 호출 프로세스 엠부보다는 위로 올리기
 
 const path = require('path')
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
 const session=require('express-session');
 const dotenv=require('dotenv')
+
+dotenv.config(); //비밀키 호출 프로세스 엠부보다는 위로 올리기
+const indexRouter=require('./routes'); //indexrouter 가져옿기
 
 const app=express();
 
@@ -30,11 +32,17 @@ app.use(session(
     saveUninitialized:false,
     secret:process.env.COOKIE_SECRET,
     cookie:{
+        
         httpOnly:true, //세션안에서는 쿠키를 무조건 설정해야하고 httponly를 true로 설정을해야 js로 공격을 당하지 않는다
+        secure:false,
     },
     name:'connect.sid'
 }
 ));
+
+app.use('/',indexRouter);
+
+
 app.use(express.json());
 app.use(express.urlencoded({extenided:true}));
 const multer= require('multer');
