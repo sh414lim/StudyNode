@@ -12,7 +12,14 @@ const app=express();
 //미들웨어 순서 중요 ->모건 무조건 실행->거의 모든 미들웨어는 내부적으로 next 를 실행한다
 app.use(morgan('dev'));
 // app.use('요청경로',express.static('실제경로'))
-app.use(express.static(path.join(__dirname,'public'))) //정적 파일을 보내줌.파일이 실제 경로 안에 존재하면 다음 미들웨어를 호출한다
+app.use('/',(req,res,next)=>{
+    if(req.session.id){
+        //미들웨어 확장
+        express.static(__dirname,'public')(req,res,next)
+    }else{
+     next();   
+    }
+})
 app.use(cookieParser('password'));
 app.use(session(
 {
@@ -27,7 +34,28 @@ app.use(session(
 ));
 app.use(express.json());
 app.use(express.urlencoded({extenided:true}));
+const multer= require('multer');
+const fs=require('fs');
+try{
+    fs.readdirSync('uploads');
 
+}catch(erroe){
+    console.error('업로드 폴더가 없어 업로드 폴더를 생성합니다');
+    fs.mkdirSync('uploads');
+}
+const upload=multer({
+    //스토리지는 업로드한 파일을 어디에 저장할지 설정 가능 메모리 나 하드
+    storage:multer.diskStorage({
+        destination(req,file,done){ //어디다 저장할지
+            done(null,'uploads/');// 업로드 파일에 저장
+        },
+        filename(req,file,done){
+            const ext=path.extname(file.originalname)
+            done(null,path.basename(file.originalname,ext)+Date.now()+ext);//확장자를 넣는 이유 
+        },
+    }),
+    limits:{fileSize:S + 1024 + 1024}, //파일 사이즈나 파일 갯수
+})
 
 app.set('port',process.env.PORT || 3000); //서버에 속성을 심는다
 
