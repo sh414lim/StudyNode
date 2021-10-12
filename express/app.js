@@ -20,12 +20,12 @@ app.use('/',(req,res,next)=>{
      next();   
     }
 })
-app.use(cookieParser('password'));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session(
 {
     resave:false,
     saveUninitialized:false,
-    secret:"marko",
+    secret:process.env.COOKIE_SECRET,
     cookie:{
         httpOnly:true, //세션안에서는 쿠키를 무조건 설정해야하고 httponly를 true로 설정을해야 js로 공격을 당하지 않는다
     },
@@ -43,6 +43,7 @@ try{
     console.error('업로드 폴더가 없어 업로드 폴더를 생성합니다');
     fs.mkdirSync('uploads');
 }
+//어떤 파일에 어떤이름으로 업로드할지를 설정한다
 const upload=multer({
     //스토리지는 업로드한 파일을 어디에 저장할지 설정 가능 메모리 나 하드
     storage:multer.diskStorage({
