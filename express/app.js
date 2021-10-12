@@ -1,8 +1,11 @@
 const express = require("express");  
+dotenv.config(); //비밀키 호출 프로세스 엠부보다는 위로 올리기
+
 const path = require('path')
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
 const session=require('express-session');
+const dotenv=require('dotenv')
 
 const app=express();
 
