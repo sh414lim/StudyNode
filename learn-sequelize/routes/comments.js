@@ -1,20 +1,21 @@
 const express = require('express');
-const { Comment } = require('../models');
+const { User,Comment } = require('../models');
 
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {
-  try {
-    const comment = await Comment.create({
-      commenter: req.body.id,
-      comment: req.body.comment,
+try{
+    const user= await User.findOne({where:{id : req.body.id}});
+    const comment = await Commnet.create({
+        comment:req.body.comment,
     });
+    const userComment = await user.addCommnet(comment);
     console.log(comment);
-    res.status(201).json(comment);
-  } catch (err) {
+    res.status(201).json(userComment);
+}catch(err){
     console.error(err);
     next(err);
-  }
+}
 });
 
 router.route('/:id')
