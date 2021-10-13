@@ -23,6 +23,9 @@ module.exports = class Comment extends Sequelize.Model {
     });
   }
 
+
+  //belongsto 일떄는 target key 
+  //belongsto 일때 commente 컬럼 추가
   static associate(db) {
     db.Comment.belongsTo(db.User, { foreignKey: 'commenter', targetKey: 'id' });
   }

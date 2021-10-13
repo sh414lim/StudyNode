@@ -3,10 +3,11 @@ const Sequelize = require('sequelize');
 module.exports = class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init({
+      
       name: {
         type: Sequelize.STRING(20),
         allowNull: false,
-        unique: true,
+        unique: true, //고유
       },
       age: {
         type: Sequelize.INTEGER.UNSIGNED,
@@ -21,13 +22,13 @@ module.exports = class User extends Sequelize.Model {
         allowNull: true,
       },
       created_at: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE, //DATETIME, MYSQL DATE -> Sequelize DateOnly
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
     }, {
       sequelize,
-      timestamps: false,
+      timestamps: false, 
       underscored: false,
       modelName: 'User',
       tableName: 'users',
@@ -37,7 +38,10 @@ module.exports = class User extends Sequelize.Model {
     });
   }
 
+    //hasMany 이면 source key
   static associate(db) {
     db.User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id' });
   }
 };
+
+//외래키는 남 -> comment
